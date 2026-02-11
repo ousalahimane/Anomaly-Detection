@@ -1,0 +1,32 @@
+import numpy as np
+import tensorflow as tf
+from data_loader import DataGenerator
+from models import VAEmodel
+from utils import process_config, get_args
+
+tf.compat.v1.disable_eager_execution()
+
+args = get_args()
+config = process_config(args.config)
+
+sess = tf.compat.v1.Session()
+data = DataGenerator(config)
+model_vae = VAEmodel(config)
+
+sess.run(tf.compat.v1.global_variables_initializer())
+model_vae.load(sess)
+
+embeddings_train = []
+for i in range(data.n_train_lstm):
+    feed = {
+        model_vae.original_signal: data.train_set_lstm['data'][i],
+        model_vae.is_code_input: False,
+        model_vae.code_input: np.zeros((1, config['code_size']))
+    }
+    z = sess.run(model_vae.code_mean, feed_dict=feed)
+    embeddings_train.append(z)
+
+embeddings_train = np.array(embeddings_train)
+np.save("embeddings_train.npy", embeddings_train)
+
+print("✅ embeddings sauvegardés")

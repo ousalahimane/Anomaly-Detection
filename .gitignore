@@ -1,0 +1,8 @@
+# Données PEMS (fichiers lourds)
+traffic-anomaly-detection-pems-hybrid/PEMS-processed-allstations-npz/
+
+# Résultats d'expériences
+traffic-anomaly-detection-pems-hybrid/VAE-LSTM-for-anomaly-detection/experiments/
+
+# Datasets
+traffic-anomaly-detection-pems-hybrid/VAE-LSTM-for-anomaly-detection/datasets/

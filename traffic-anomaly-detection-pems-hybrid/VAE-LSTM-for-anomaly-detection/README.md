@@ -53,6 +53,33 @@ Each `.npz` file contains:
 - `station_id`
 
 ---
+## Preprocessing
 
-## Repository Structure
+We pre-processed the **PeMS traffic dataset**, which consists of multivariate traffic time series collected from multiple highway stations (e.g., speed, flow, and occupancy measurements).
 
+For each station, the original continuous time series was split into:
+- a **training set** containing only normal traffic behavior,
+- and a **test set** used for anomaly detection and evaluation.
+
+The split index is stored explicitly to ensure reproducibility and avoid data leakage.
+Code available in PEMS-dataset-preprocessing.ipynb
+
+### Training
+
+1. **VAE training**
+   - The VAE is trained on normal traffic windows only.
+   - It learns a latent representation of normal traffic patterns.
+   - The objective function is based on the ELBO (reconstruction loss + KL divergence).
+
+2. **LSTM training**
+   - The LSTM is trained on sequences of VAE latent embeddings.
+   - It learns the normal temporal evolution of traffic patterns.
+   - 
+To train the model, simply run:
+
+```bash
+python3 train_vae.py --config PEMS_config.json
+```
+```bash
+python3 train_lstm.py --config PEMS_config.json
+```
